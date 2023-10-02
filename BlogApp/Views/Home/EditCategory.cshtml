@@ -1,0 +1,49 @@
+<!-- Views/Home/EditCategory.cshtml -->
+@model BlogApp.Models.Category
+
+<h2>Edit Category</h2>
+
+<form id="editCategoryForm" asp-controller="Home" asp-action="EditCategory" method="post">
+    <input type="hidden" asp-for="CategoryId" />
+
+    <div class="form-group">
+        <label asp-for="CategoryCode">Category Code:</label>
+        <input asp-for="CategoryCode" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="CategoryDescription">Category Description:</label>
+        <input asp-for="CategoryDescription" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Active">Active:</label>
+        <select asp-for="Active" class="form-control">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
+<script>
+    // Add AJAX for submitting the form
+    $("#editCategoryForm").submit(function (event) {
+        event.preventDefault();
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            url: '@Url.Action("EditCategory")',
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                // Handle success, e.g., close modal, refresh category list
+                console.log("Category updated successfully");
+            },
+            error: function (error) {
+                // Handle error, e.g., display error message
+                console.error("Error updating category: " + error.responseText);
+            }
+        });
+    });
+</script>

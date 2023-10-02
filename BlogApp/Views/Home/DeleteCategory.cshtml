@@ -1,0 +1,35 @@
+<!-- Views/Home/DeleteCategory.cshtml -->
+@model BlogApp.Models.Category
+
+<h2>Delete Category</h2>
+
+<p>Are you sure you want to delete this category?</p>
+
+<form id="deleteCategoryForm" asp-controller="Home" asp-action="ConfirmDeleteCategory" method="post">
+    <input type="hidden" asp-for="CategoryId" />
+
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+
+<script>
+    // Add AJAX for submitting the form
+    $("#deleteCategoryForm").submit(function (event) {
+        event.preventDefault();
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            url: '@Url.Action("DeleteCategory")',
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                // Handle success, e.g., close modal, refresh category list
+                console.log("Category deleted successfully");
+            },
+            error: function (error) {
+                // Handle error, e.g., display error message
+                console.error("Error deleting category: " + error.responseText);
+            }
+        });
+    });
+</script>

@@ -1,0 +1,28 @@
+<!-- Views/Categories/Index.cshtml -->
+@model List<Category>
+
+<h2>Categories</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Category Code</th>
+            <th>Category Description</th>
+            <th>Active</th>
+            <th>Created Date</th>
+            <th>Modified Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.CategoryCode</td>
+                <td>@category.CategoryDescription</td>
+                <td>@category.Active</td>
+                <td>@category.CreatedDate</td>
+                <td>@category.ModifiedDate</td>
+            </tr>
+        }
+    </tbody>
+</table>

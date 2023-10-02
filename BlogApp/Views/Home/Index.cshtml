@@ -1,0 +1,73 @@
+﻿<!-- Views/Categories/Index.cshtml -->
+@model List<Category>
+
+<h2>Categories</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Category Code</th>
+            <th>Category Description</th>
+            <th>Active</th>
+            <th>Created Date</th>
+            <th>Modified Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.CategoryCode</td>
+                <td>@category.CategoryDescription</td>
+                <td>@category.Active</td>
+                <td>@category.CreatedDate</td>
+                <td>@category.ModifiedDate</td>
+                <td>
+                    <button data-bind="click: $root.editItem.bind($data, @category.CategoryId)">Edit</button>
+                    <button data-bind="click: $root.deleteItem.bind($data, @category.CategoryId)">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js"></script>
+<script>
+    // Define your Knockout.js view model
+    function CategoryViewModel() {
+        var self = this;
+
+        // Observable array to store categories
+        self.categories = ko.observableArray(@Html.Raw(Json.Serialize(Model)));
+
+        // Function to edit a category
+        self.editItem = function (categoryId) {
+            window.location.href = '/Home/EditCategory/' + categoryId;
+        };
+
+        // Function to delete a category
+        self.deleteItem = function (categoryId) {
+            if (confirm("Are you sure you want to delete this category?")) {
+                $.ajax({
+                    url: '/Home/DeleteCategory/' + categoryId,
+                    type: 'POST',
+                    success: function (data) {
+                        // Handle success, e.g., remove category from observable array
+                        self.categories.remove(function (item) {
+                            return item.CategoryId === categoryId;
+                        });
+                    },
+                    error: function (error) {
+                        // Handle error, e.g., display error message
+                        console.error("Error deleting category: " + error.responseText);
+                    }
+                });
+            }
+        };
+    }
+
+    // Apply the Knockout.js bindings
+    ko.applyBindings(new CategoryViewModel());
+</script>
